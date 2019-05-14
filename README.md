@@ -1,5 +1,5 @@
 # YACHT
-Yet Another Crypto-Hodling Tracker
+Yet Another Crypto Holdings Tracker
 
 
 
