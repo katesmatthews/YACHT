@@ -8,15 +8,16 @@ h1 {
   color: rgb(77, 145, 136);
   border-radius: 10px;
   width: 350px;
-  /* background-color: rgba(170, 193, 201, 20); */
-  /* box-shadow: 1px 5px 5px; */
-  /* box-shadow: 13px 10px 63px 38px rgba(195, 203, 204, 0.75); */
   margin: 30px auto;
 }
 
 #logo {
   width: 311px;
   height: 117px;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .coins {
