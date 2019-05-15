@@ -1,31 +1,121 @@
+/* Global styling */
 .App {
   margin: 1rem;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
 }
-
-h1 {
-  color: rgb(77, 145, 136);
-  border-radius: 10px;
-  width: 350px;
-  margin: 30px auto;
-}
-
-#logo {
-  width: 311px;
-  height: 117px;
-}
-
 ul {
   list-style-type: none;
 }
+a:link {
+  text-decoration: none;
+  color: rgb(110, 100, 255);
 
-.coins {
+}
+a:visited {
+  text-decoration: none;
+  color: rgb(110, 100, 255);
+}
+
+
+
+/* Heading */
+h1 {
+  color: rgb(77, 145, 136);
+  font-size: 50px;
+  border-radius: 10px;
+  width: 350px;
+  margin: 0 auto;
+  color: #fff;
+  font-size: 4em;
+  /* font-weight: bold; */
+  text-shadow: 0 1px 0 #ccc, 0 1px 0 #c9c9c9, 0 0px 0 rgb(174, 174, 174), 0 1px 0 #b9b9b9, 0 1px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(140, 186, 185, 0.728), 0 5px 10px rgba(159, 159, 159, 0.25), 0 10px 10px rgba(148, 148, 148, 0.2), 0 20px 20px rgba(177, 177, 177, 0.15);
+}
+
+
+#logo {
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  width: 311px;
+  height: 117px;
+}
+h2 {
+  font-size: 12px;
+  color: grey;
+  margin-bottom: 20px;
+}
+
+
+
+/* Coin Buttons */
+#coinbutton_container {
+  margin: 5px 0px 10px 0px;
+}
+.coinbutton {
+  width: 50px;
   height: 30px;
   font-size: 13px;
+  color: rgb(0, 63, 0);
   background-color: lightblue;
-  border-radius: 5px;
-  box-shadow: 3px 3px 3px;
   margin: 2px;
   padding: 3px;
+  border: .5px solid rgb(0, 240, 240);
+  border-radius: 5px;
+  box-shadow: 3px 2px 5px rgb(0,150,150);
+  outline: none;
+}
+
+
+
+/* Prices */
+#prices_container {
+  position: absolute;
+  top: 250px;
+  left: 50px;
+  width: 260px;
+  margin: 10px auto;
+  padding: 5px;
+}
+.coinprice {
+  border-radius: 4px;
+  box-shadow: 0px 0px 4px 2px rgb(0, 220, 220);
+  font-size: 16px;
+  background-color: rgb(131, 170, 116);
+  color: rgb(182, 253, 218);
+  margin: 5px;
+  padding: 8px 10px 8px 10px;
+}
+
+
+ /* News Items */
+h3 {
+  font-size: 18px;
+  color: rgb(146, 126, 126);
+}
+#news_container {
+  font-size: 11px;
+  width: 650px;
+  background-color: rgb(217, 224, 235);
+  border-radius: 5px;
+  box-shadow: 3px 2px 15px 5px rgb(0, 150, 150);
+  margin: 0 auto;
+  padding: 2px 20px 2px 20px;
+  position: absolute;
+  bottom: 100px;
+}
+#news_container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+#news_list li {
+  text-align: left;
+  font-size: 13px;
+  font-style: italic;
+  margin: 3px;
+  background-color: rgb(245, 249, 255);
+  border-radius: 4px;
+  border: 1px solid lightgrey;
+  padding: 5px;
 }

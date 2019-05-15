@@ -1,7 +1,12 @@
 {
   "name": "yacht",
-  "version": "1.0.0",
-  "description": "Yet Another Crypto-Hodling Tracker",
+  "version": "0.1.0",
+  "description": "Yet Another Crypto-Holdings Tracker",
+  "keywords": [
+    "bitcoin",
+    "cryptocurrency",
+    "portfolio tracker"
+  ],
   "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -41,11 +46,15 @@
     "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.16.4",
     "mongodb": "^3.2.4",
+    "mongoose": "^5.5.8",
     "newsapi": "^2.4.0",
     "react": "^16.8.6",
+    "react-contenteditable": "^3.2.6",
     "react-dom": "^16.8.6",
-    "react-hot-loader": "^4.8.4"
+    "react-hot-loader": "^4.8.4",
+    "util": "^0.12.0"
   }
 }
