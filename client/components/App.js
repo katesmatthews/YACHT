@@ -8,58 +8,34 @@ import "./style.css";
 class App extends Component{
   constructor() {
     super();  
-    this.state = {
-      btcusd : { display: true},
-      ethusd : { display: true},
-      ltcusd : { display: true},
-      xrpusd : { display: true},
-    };
-    this.fetchBTCUSD = this.fetchBTCUSD.bind(this);
-    this.fetchETHUSD = this.fetchETHUSD.bind(this);
-    this.fetchLTCUSD = this.fetchLTCUSD.bind(this);
-    this.fetchXRPUSD = this.fetchXRPUSD.bind(this);
+    this.state = { coinList: ['btcusd', 'ethusd', 'ltcusd', 'xrpusd'] };
+    for (let coin of this.state.coinList) this.state[coin] = { display: false };
+    
+    this.fetchCoin = this.fetchCoin.bind(this);
+    this.fetchNews = this.fetchNews.bind(this);
+    this.toggleCoinVisibility = this.toggleCoinVisibility.bind(this);
   }
 
-  fetchBTCUSD() {
-    // if (this.state.btcusd.display) {
-      fetch('https://api.coinbase.com/v2/prices/BTC-USD/buy')
-        .then((res) => res.json())
-        .then((res) => {this.setState({ btcusd: {data : res.data } });});
-    // }
-  }
-  fetchETHUSD() {
-    // if (this.state.ethusd.display) {
-    fetch('https://api.coinbase.com/v2/prices/ETH-USD/buy')
-      .then((res) => res.json())
-      .then((res) => {this.setState({ ethusd: {data : res.data }});});
-    // }
-  }
-  fetchLTCUSD() {
-    // if (this.state.ltcusd.display) {
-    fetch('https://api.coinbase.com/v2/prices/LTC-USD/buy')
-      .then((res) => res.json())
-      .then((res) => {this.setState({ ltcusd: {data : res.data }});}); 
-    // } 
-  }
-  fetchXRPUSD() { 
-    // if (this.state.xrpusd.display) {
-    fetch('https://api.coinbase.com/v2/prices/XRP-USD/buy')
-      .then((res) => res.json())
-      .then((res) => {this.setState({ xrpusd: {data : res.data }});});  
-    // }  
-  }
 
-  componentDidMount() {
-    this.fetchBTCUSD()
-    this.fetchETHUSD()
-    this.fetchLTCUSD()
-    this.fetchXRPUSD() 
+  fetchCoin(coin) {
+    const coinAbbrev = coin.slice(0, 3);
+    fetch(`https://api.coinbase.com/v2/prices/${coinAbbrev}-USD/buy`)
+      .then((res) => res.json())
+      .then((res) => {
+        // update state ONLY if we either have no data, or the price is unchanged
+        if (!this.state[coin].data || this.state[coin].data.amount !== res.data.amount) {
+          const newState = {};
+          newState[coin] = {data : res.data , display : true, intervalId : this.state[coin].intervalId };
+          this.setState(newState);
+        }
+      });
+    }
 
-    // Get Bitcoin-related news
+  fetchNews() {
     fetch('https://newsapi.org/v2/everything?q=bitcoin&apiKey=2db8b37f71e5488aab951bd6d8953207')
       .then((res) => res.json())
       .then((res) => {
-        let newsData = res.articles.slice(0,5);
+        let newsData = res.articles.slice(0,8);
         newsData = newsData.map(article => {
           return {
             source: article.source.name,
@@ -69,49 +45,67 @@ class App extends Component{
             fullArticle: article.content,
           };
         });
-        console.log('newsData in fetch news is ', newsData);
         this.setState({newsData: newsData});
     });
   }
 
   toggleCoinVisibility(coin) {
     const coinClone = JSON.parse(JSON.stringify(this.state[coin]));
-    coinClone.display = !coinClone.display;
+    
+    if (!coinClone.display) {
+      this.fetchCoin(coin)
+      coinClone.intervalId = setInterval(() => this.fetchCoin(coin), 1000);
+      coinClone.display = !coinClone.display;
+    } else {
+      clearInterval(coinClone.intervalId);
+      delete coinClone.intervalId;
+      coinClone.display = !coinClone.display;
+    }
 
     const newCoinState = {};
     newCoinState[coin] = coinClone;
     this.setState(newCoinState);
   }
 
-  render(){
-    // Create array of "Coin" price components
-    const btcusd = (this.state.btcusd && this.state.btcusd.display && this.state.btcusd.data) ? (this.state.btcusd) : '';
-    const ethusd = (this.state.ethusd && this.state.ethusd.display && this.state.ethusd.data) ? (this.state.ethusd) : '';
-    const ltcusd = (this.state.ltcusd && this.state.ltcusd.display && this.state.ltcusd.data) ? (this.state.ltcusd) : '';
-    const xrpusd = (this.state.xrpusd && this.state.xrpusd.display && this.state.xrpusd.data) ? (this.state.xrpusd) : '';
-    const coinComponentArr = [btcusd, ethusd, ltcusd, xrpusd]
-      .filter(coinInfo => coinInfo.display)
-      .map(coinInfo => <CoinTicker className="coinprice" coinName={coinInfo.data.base} price={coinInfo.data.amount} />);
+  componentDidMount() {
+    this.fetchNews();
+  }
+  
 
-      // console.log('coinComponentArr after building is ', coinComponentArr);
+  render(){
+    // Conditionally assemble array of "Coin" price components
+    const conditionalCoinData = this.state.coinList.map(coin => {
+      return this.state[coin] && this.state[coin].display && this.state[coin].data ? this.state[coin] : ''
+    });
+    const coinComponentArr = 
+      conditionalCoinData
+      .filter(coinInfo => coinInfo.display)
+      .map(coinInfo => <CoinTicker coinName={coinInfo.data.base} price={coinInfo.data.amount} />);
 
     // Create array of "NewsItem" components
     const newsItemArr = [];
     if (this.state.newsData) this.state.newsData.forEach((article, ind) => newsItemArr.push(<NewsItem className="newsitem" article={this.state.newsData[ind]}/>));
 
+    // Create array of coin-displaying buttons
+    const coinButtonArr = this.state.coinList.map(coin => {
+      return (<button className="coinbutton" onClick={() => this.toggleCoinVisibility(coin)}>
+                {coin.slice(0, 3).toUpperCase()}
+              </button>)});
+
+
     return(
       <div className="App">
-        <h1> YACHT </h1>
-        <h2> yet another crypto-holdings tracker</h2>
-        <img id="logo" src="./build/7c6b2619c84da1d88aab58c46e317c07.png"></img><br></br>
+
+        <header id="header">
+          <h1> YACHT </h1>
+          <h2> yet another crypto-holdings tracker</h2>
+          <img id="logo" src="./build/7c6b2619c84da1d88aab58c46e317c07.png"></img><br></br>
+        </header>
 
         <section id="coinbutton_container">
-          <button className="coinbutton" onClick={() => this.toggleCoinVisibility('btcusd')}>BTC</button>
-          <button className="coinbutton" onClick={() => this.toggleCoinVisibility('ethusd')}>ETH</button>
-          <button className="coinbutton" onClick={() => this.toggleCoinVisibility('ltcusd')}>LTC</button>
-          <button className="coinbutton" onClick={() => this.toggleCoinVisibility('xrpusd')}>XRP</button>
+          {coinButtonArr}
         </section>
-        
+
         <section id="prices_container">
             <ul>
               {coinComponentArr}
@@ -127,15 +121,37 @@ class App extends Component{
           </ul>
         </section>
 
-        {/* INSERT LOGIN STUFF HERE */}
-        {/* <button onClick=>Super Secret User Data</button> */}
+        <section id="add_portfolio">
+          <form method="POST" action="/addportfolio">        
+            <label htmlFor="coin-select">Choose a coin to add to portfolio:<br></br></label>
+            <select name="selectedcoin">
+                <option value="btc">BTC</option>
+                <option value="eth">ETH</option>
+                <option value="ltc">LTC</option>
+                <option value="xrp">XRP</option>
+            </select>
+            <input name="cointqty" type="text"></input>
+            <input type="submit" value="Add Coins"></input>
+          </form>
+        </section>
+
+        <section id="login_form">
+          <form method="POST" action="/login">
+            <input name="username" type="text" placeholder="username"></input>
+            <input name="password" type="password" placeholder="password"></input>
+            <input type='submit' value="Log In"></input>
+          </form>
+          <form method="POST" action="/signup">
+            <input name="username" type="text" placeholder="username"></input>
+            <input name="password" type="password" placeholder="password"></input>
+            <input type="submit" value="Sign Up"></input>
+          </form>
+        </section>
         
       </div>
     );
   }
 }
-
-
 
 // powered by News API
 // const util = require('util');

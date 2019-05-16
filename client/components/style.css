@@ -31,8 +31,6 @@ h1 {
   /* font-weight: bold; */
   text-shadow: 0 1px 0 #ccc, 0 1px 0 #c9c9c9, 0 0px 0 rgb(174, 174, 174), 0 1px 0 #b9b9b9, 0 1px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(140, 186, 185, 0.728), 0 5px 10px rgba(159, 159, 159, 0.25), 0 10px 10px rgba(148, 148, 148, 0.2), 0 20px 20px rgba(177, 177, 177, 0.15);
 }
-
-
 #logo {
   position: absolute;
   left: 50px;
@@ -46,6 +44,18 @@ h2 {
   margin-bottom: 20px;
 }
 
+/* Forms (login, signup, add to portfolio) */
+#login_form {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+}
+#add_portfolio {
+  position: absolute;
+  top: 150px;
+  right: 50px;
+  font-size: 14px;
+}
 
 
 /* Coin Buttons */

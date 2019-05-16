@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const User = require('../models/user-model.js');
 
-exports.test = (req, res) => {
-  mongoose.connect('mongodb+srv://kate:s0ins3cur3@cluster0-btilm.mongodb.net/YACHT?retryWrites=true'); 
+const userController = {};
+
+userController.test = (req, res) => {
+  // mongoose.connect('mongodb+srv://kate:s0ins3cur3@cluster0-btilm.mongodb.net/YACHT?retryWrites=true'); 
   // mongoose.connect('mongodb+srv://yachtreadwrite:s0ins3cur3@cluster0-btilm.mongodb.net/test?retryWrites=true'); 
   mongoose.connection.once('open', (err, result) => {
     if (err) console.log('error in connecting, ', err);
@@ -24,3 +26,27 @@ exports.test = (req, res) => {
     }
   });
 };
+
+userController.createUser = (req, res, next) => {
+  const newUser = new User(req.body);
+  newUser.save((err, result) => {
+    if (err) return res.json(err)
+    console.log('successful usersave: ', result);
+    res.end();
+  });
+};
+
+userController.verifyUser = (req, res, next) => {
+  User.findOne({ username: req.body.username }, (err, result) => {
+    if (err) return res.json(err);
+    if (!result) return res.send('user doesn\'t exist');
+    if (req.body.password === result.password) return res.send('validated');
+    return res.send('invalid credentials');
+  });
+};
+
+userController.portfolioAdd = (req, res, next) => {
+
+};
+
+module.exports = userController;

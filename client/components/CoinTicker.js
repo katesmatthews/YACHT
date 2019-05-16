@@ -6,8 +6,8 @@ class CoinTicker extends Component {
   }
   render() {
     return(
-      <li className={this.props.className}>
-        {this.props.coinName} / USD : {this.props.price}
+      <li className="coinprice" id={this.props.coinName}>
+        USD / {this.props.coinName} : {this.props.price}
       </li>
     )
   }
