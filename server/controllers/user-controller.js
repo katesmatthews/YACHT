@@ -27,16 +27,19 @@ userController.verifyUser = (req, res, next) => {
 };
 
 userController.portfolioAdd = (req, res, next) => {
-  const selectedCoin = req.body.selectedcoin;
-  const coinQty = req.body.coinqty;
-  const portfolio = {};
-  portfolio[selectedCoin] = {
-    qty: coinQty,
-    display: true,
-  };
-  
-  console.log('portfolio in portfolioAdd is: ', portfolio);
-  res.json(portfolio);
+  delete req.body.coinList;
+  delete req.body.newsData;
+  // console.log('req.body in portfolio add is', req.body);
+
+  User.findOneAndUpdate({ username: req.body.username }, { portfolio: req.body },
+    (err, result) => {
+      if (err) {
+        console.log('err in update: ', err);
+        return res.send(err);
+      }
+      console.log('successful update: ', result);
+      return res.json(result);
+    });
 };
 
 userController.getPortfolio = (req, res, next) => {

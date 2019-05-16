@@ -9,7 +9,7 @@ import "./style.css";
 class App extends Component{
   constructor() {
     super(); 
-    this.initialState = { coinList: ['btcusd', 'ethusd', 'ltcusd', 'xrpusd'], username: Cookies.get('username') };
+    this.initialState = { coinList: ['btcusd', 'ethusd', 'ltcusd', 'xrpusd'], username: Cookies.get('username') ? Cookies.get('username') : '' };
     for (let coin of this.initialState.coinList) this.initialState[coin] = { display: false, qty: 0 };
     this.state = this.initialState;
     
@@ -21,7 +21,6 @@ class App extends Component{
     this.logInUser = this.logInUser.bind(this);
     this.logOutUser = this.logOutUser.bind(this);
   }
-
 
   fetchCoinPrice(coin) {
     const coinAbbrev = coin.slice(0, 3);
@@ -93,7 +92,6 @@ class App extends Component{
 
     this.setState(stateCopy);
   }
-
   
   logInUser(e) {
     e.preventDefault();
@@ -121,6 +119,7 @@ class App extends Component{
   logOutUser(e) {
     e.preventDefault();
     Cookies.remove('validated');
+    // Cookies.remove('username');
 
     const stateCopy = JSON.parse(JSON.stringify(this.state));
     for (let property in this.state) {
