@@ -1,25 +1,22 @@
 # YACHT
-Yet Another Crypto Holdings Tracker
+`Yet Another Crypto Holdings Tracker`
 
 
 
 1. Who is YACHT for?
-- People interested in the price movements of cryptocurrencies.
+- People who spend too much time monitoring their cryptocurrency portfolios
 2. Why use YACHT?
-- Because manually checking sources for current prices and calculating one’s current portfolio value is annoying.
+- Because manually checking sources for current prices and calculating one’s current portfolio value is non-DRY
 3. What is YACHT?
-- A single page that shows currency information of one’s choosing.
+- A SPA that shows currency tickers of your choosing and Bitcoin-related news items
+
+4. What will YACHT eventually do?
+- Allow you to either manually enter your cryptocurrency holdings or log in with Coinbase, and display your resulting portfolio
+- Present you with graphs of historical data for a chosen currency, and relevant news items
+- Allow you to execute trades for your Coinbase account
 
 
-4. What does YACHT promise to do?
--  Present a landing page with currency list buttons, each of which adds price tickers to the page
--  Allow you to manually enter your holdings, and display your resulting portfolio
-
-
-5. What are the stretch goals?
-- You will be able to log in and view your saved portfolio, or utilize Coinbase OAuth to display the your live wallet information.
-- You will be able to view graphs of historical data for a chosen currency, and relevant news items.
-- You will be able to execute real trades for your Coinbase account.
-
-6. What were the tough technical challenges involved with creating YACHT?
-Figuring out how to actually make a CRUD app. Integrate Node, Mongo, and React, along with external APIs.
+To view this app:
+1. Clone this repo
+2. From the terminal, run `npm install`, `npm run build`, and `npm start`
+3. Navigate to http://localhost:8080/ in your browser
