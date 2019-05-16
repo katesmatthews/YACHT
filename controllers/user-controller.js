@@ -32,7 +32,7 @@ userController.createUser = (req, res, next) => {
   newUser.save((err, result) => {
     if (err) return res.json(err)
     console.log('successful usersave: ', result);
-    res.end();
+    return res.redirect('/');
   });
 };
 
@@ -46,7 +46,17 @@ userController.verifyUser = (req, res, next) => {
 };
 
 userController.portfolioAdd = (req, res, next) => {
-
+  const selectedCoin = req.body.selectedcoin;
+  const coinQty = req.body.coinqty;
+  const portfolio = {};
+  portfolio[selectedCoin] = {
+    qty: coinQty,
+    display: true,
+  };
+  
+  console.log('portfolio is: ', portfolio);
+  // res.json(portfolio);
+  return res.redirect('/');
 };
 
 module.exports = userController;

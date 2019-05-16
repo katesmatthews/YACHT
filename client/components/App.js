@@ -11,13 +11,13 @@ class App extends Component{
     this.state = { coinList: ['btcusd', 'ethusd', 'ltcusd', 'xrpusd'] };
     for (let coin of this.state.coinList) this.state[coin] = { display: false };
     
-    this.fetchCoin = this.fetchCoin.bind(this);
+    this.fetchCoinPrice = this.fetchCoinPrice.bind(this);
     this.fetchNews = this.fetchNews.bind(this);
     this.toggleCoinVisibility = this.toggleCoinVisibility.bind(this);
   }
 
 
-  fetchCoin(coin) {
+  fetchCoinPrice(coin) {
     const coinAbbrev = coin.slice(0, 3);
     fetch(`https://api.coinbase.com/v2/prices/${coinAbbrev}-USD/buy`)
       .then((res) => res.json())
@@ -25,7 +25,12 @@ class App extends Component{
         // update state ONLY if we either have no data, or the price is unchanged
         if (!this.state[coin].data || this.state[coin].data.amount !== res.data.amount) {
           const newState = {};
-          newState[coin] = {data : res.data , display : true, intervalId : this.state[coin].intervalId };
+          newState[coin] = {
+            data: res.data,
+            display: true,
+            intervalId: this.state[coin].intervalId,
+            qty: this.state[coin].qty,
+          };
           this.setState(newState);
         }
       });
@@ -53,8 +58,8 @@ class App extends Component{
     const coinClone = JSON.parse(JSON.stringify(this.state[coin]));
     
     if (!coinClone.display) {
-      this.fetchCoin(coin)
-      coinClone.intervalId = setInterval(() => this.fetchCoin(coin), 1000);
+      this.fetchCoinPrice(coin)
+      coinClone.intervalId = setInterval(() => this.fetchCoinPrice(coin), 5000);
       coinClone.display = !coinClone.display;
     } else {
       clearInterval(coinClone.intervalId);
@@ -130,7 +135,7 @@ class App extends Component{
                 <option value="ltc">LTC</option>
                 <option value="xrp">XRP</option>
             </select>
-            <input name="cointqty" type="text"></input>
+            <input name="coinqty" type="text"></input>
             <input type="submit" value="Add Coins"></input>
           </form>
         </section>

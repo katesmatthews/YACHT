@@ -21,7 +21,6 @@ app.get('/supersecretuserdata', userController.test);
 
 app.post('/addportfolio', userController.portfolioAdd);
 
-
 app.post('/login', userController.verifyUser);
 
 app.post('/signup', userController.createUser);
