@@ -19,4 +19,4 @@
 To view this app:
 1. Clone this repo
 2. From the terminal, run `npm install`, `npm run build`, and `npm start`
-3. Navigate to http://localhost:8080/ in your browser
+3. Navigate to http://localhost:3000/ in your browser
