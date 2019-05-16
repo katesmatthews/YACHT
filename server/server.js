@@ -1,10 +1,9 @@
-/* eslint-disable no-console */
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-const userController = require('../controllers/user-controller');
+const userController = require('./controllers/user-controller');
 
 const app = express();
 
@@ -17,9 +16,9 @@ app.use('/build', express.static(path.join(__dirname, '../build')));
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../index.html')));
 
-app.get('/supersecretuserdata', userController.test);
-
 app.post('/addportfolio', userController.portfolioAdd);
+
+app.get('/getportfolio', userController.getPortfolio)
 
 app.post('/login', userController.verifyUser);
 
